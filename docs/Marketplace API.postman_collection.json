@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "637a528d-faa3-46ae-ad1d-593ea98ea7ab",
+		"name": "Marketplace API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "12264977"
+	},
+	"item": [
+		{
+			"name": "Auth - Registration",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"seller2\",\r\n    \"email\": \"seller2@gmail.com\",\r\n    \"password\": \"12345678\",\r\n    \"role\": \"seller\" // buyer | seller\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8000/api/registration"
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"seller2@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}"
+				},
+				"url": "http://127.0.0.1:8000/api/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Auth - Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "13|jQzN4akpg180crT4W2IXeXnXUl4DTjxzOn7zY1Jp6718e198"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"url": "http://127.0.0.1:8000/api/logout"
+			},
+			"response": []
+		},
+		{
+			"name": "Products - View",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "1|cLwPJas276CDBTwr1pEDBUry78cPlfkQgCIG8l0K6f55e697"
+					}
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://127.0.0.1:8000/api/products"
+			},
+			"response": []
+		},
+		{
+			"name": "Products - Create",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "3|iDVDjI6eIn1nCbaGwMKIKBdbm8LE6g6FgRrhO7Sd4d3f4983"
+					}
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"p7\",\r\n    \"price\": 7000,\r\n    \"description\": \"d7\"\r\n}"
+				},
+				"url": "http://127.0.0.1:8000/api/products"
+			},
+			"response": []
+		},
+		{
+			"name": "Products - Delete",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "2|7yw7zeEqDD53OUSDYjut5J5sR0xNsWetFsKR0B9C3946baea"
+					}
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": "http://127.0.0.1:8000/api/products/1"
+			},
+			"response": []
+		}
+	]
+}
