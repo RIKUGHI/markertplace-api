@@ -12,13 +12,15 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $products = Product::orderByDesc('id')->get();
 
         return Api::sendResponse(200, null, ProductResource::collection($products));
     }
 
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string'],
             'price' => ['required', 'numeric'],
@@ -35,11 +37,12 @@ class ProductController extends Controller
             'description' => $request->description,
             'user_id' => Auth::user()->id
         ]);
-        
+
         return Api::sendResponse(200, "", ProductResource::make($product));
     }
 
-    public function delete(string $id) {
+    public function delete(string $id)
+    {
         $product = Product::query()
             ->where('id', $id)
             ->where('user_id', Auth::user()->id)

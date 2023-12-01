@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function() {
+Route::get('/', function () {
     return Api::sendResponse(401, "Unauthorized", null);
 })->name('login');
 

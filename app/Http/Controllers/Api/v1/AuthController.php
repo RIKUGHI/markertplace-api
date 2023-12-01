@@ -5,19 +5,18 @@ namespace App\Http\Controllers\Api\v1;
 use App\Enums\RoleEnum;
 use App\Helper\Api;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RegistrationRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Enum;
 
 class AuthController extends Controller
 {
-    public function registration(Request $request)  {
+    public function registration(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string'],
             'email' => ['required', 'email'],
@@ -36,14 +35,15 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password), 
+            'password' => Hash::make($request->password),
             'role' => $request->role
         ]);
 
         return Api::sendResponse(200, "account created", UserResource::make($user));
     }
 
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'email' => ['required', 'email'],
             'password' => ['required']
@@ -66,7 +66,8 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout() {
+    public function logout()
+    {
         Auth::user()->tokens()->delete();
 
         return Api::sendResponse(200, "Logout", null);
