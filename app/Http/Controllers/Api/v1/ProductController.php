@@ -2,16 +2,26 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\DTO\ProductDTO;
 use App\Helper\Api;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Services\ProductService;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
+    public function __construct(
+        protected ProductService $productService
+    ) {
+    }
+
     public function index(Request $request)
     {
         $products = Product::orderByDesc('id')->get();
@@ -19,41 +29,23 @@ class ProductController extends Controller
         return Api::sendResponse(200, null, ProductResource::collection($products));
     }
 
-    public function create(Request $request)
+    public function create(ProductRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string'],
-            'price' => ['required', 'numeric'],
-            'description' => ['required'],
-        ]);
-
-        if ($validator->fails()) {
-            return Api::sendResponse(401, $validator->errors(), null);
+        try {
+            return $this->productService->store(ProductDTO::fromApiRequest($request));
+        } catch (\Throwable $th) {
+            return Api::sendResponse(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, "Internal Server Error", null);
         }
-
-        $product = Product::create([
-            'name' => $request->name,
-            'price' => $request->price,
-            'description' => $request->description,
-            'user_id' => Auth::user()->id
-        ]);
-
-        return Api::sendResponse(200, "", ProductResource::make($product));
     }
 
     public function delete(string $id)
     {
-        $product = Product::query()
-            ->where('id', $id)
-            ->where('user_id', Auth::user()->id)
-            ->first();
+        try {
+            return $this->productService->destroy($id);
+        } catch (\Throwable $th) {
+            if ($th instanceof HttpResponseException) return $th->getResponse();
 
-        if (!$product) {
-            return Api::sendResponse(404, "product not found", null);
+            return Api::sendResponse(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, "Internal Server Error", null);
         }
-
-        $product->delete();
-
-        return Api::sendResponse(200, null, null);
     }
 }

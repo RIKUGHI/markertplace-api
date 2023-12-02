@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\DTO\LoginDTO;
+use App\DTO\RegistrationDTO;
 use App\Enums\RoleEnum;
 use App\Helper\Api;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegistrationRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Services\AuthService;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -15,60 +22,36 @@ use Illuminate\Validation\Rules\Enum;
 
 class AuthController extends Controller
 {
-    public function registration(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string'],
-            'email' => ['required', 'email'],
-            'password' => ['required', 'min:8'],
-            'role' => ['required', new Enum(RoleEnum::class)]
-        ]);
-
-        if ($validator->fails()) {
-            return Api::sendResponse(401, $validator->errors(), null);
-        }
-
-        if (User::query()->where('email', $request->email)->exists()) {
-            return Api::sendResponse(409, "email already exists", null);
-        }
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => $request->role
-        ]);
-
-        return Api::sendResponse(200, "account created", UserResource::make($user));
+    public function __construct(
+        protected AuthService $authService
+    ) {
     }
 
-    public function login(Request $request)
+    public function registration(RegistrationRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => ['required', 'email'],
-            'password' => ['required']
-        ]);
+        try {
+            return $this->authService->registration(RegistrationDTO::fromApiRequest($request));
+        } catch (\Throwable $th) {
+            if ($th instanceof HttpResponseException) return $th->getResponse();
 
-        if ($validator->fails()) {
-            return Api::sendResponse(401, $validator->errors(), null);
+            return Api::sendResponse(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, "Internal Server Error", null);
         }
+    }
 
-        if (!Auth::attempt($request->only(['email', 'password']))) {
-            return Api::sendResponse(409, "The provided credentials do not match our records", null);
+    public function login(LoginRequest $request)
+    {
+        try {
+            return $this->authService->login(LoginDTO::fromApiRequest($request));
+        } catch (\Throwable $th) {
+            if ($th instanceof HttpResponseException) return $th->getResponse();
+
+            return Api::sendResponse(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, "Internal Server Error", null);
         }
-
-        $user = User::query()->where('email', $request->email)->first();
-
-        return Api::sendResponse(200, "", [
-            'name' => $user->name,
-            'email' => $user->email,
-            "token" => $user->createToken('marketplace-api', [$user->role->value])->plainTextToken
-        ]);
     }
 
     public function logout()
     {
-        Auth::user()->tokens()->delete();
+        $this->authService->logout();
 
         return Api::sendResponse(200, "Logout", null);
     }

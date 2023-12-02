@@ -2,15 +2,13 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\RoleEnum;
 use App\Helper\Api;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rules\Enum;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\Validation\Validator;
 
-class RegistrationRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,13 +26,10 @@ class RegistrationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'min:8'],
-            'role' => ['required', new Enum(RoleEnum::class)]
+            'password' => ['required']
         ];
     }
-    
 
     protected function failedValidation(Validator $validator)
     {
