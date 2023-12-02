@@ -12,8 +12,6 @@ use App\Services\ProductService;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -43,7 +41,9 @@ class ProductController extends Controller
         try {
             return $this->productService->destroy($id);
         } catch (\Throwable $th) {
-            if ($th instanceof HttpResponseException) return $th->getResponse();
+            if ($th instanceof HttpResponseException) {
+                return $th->getResponse();
+            }
 
             return Api::sendResponse(JsonResponse::HTTP_INTERNAL_SERVER_ERROR, "Internal Server Error", null);
         }

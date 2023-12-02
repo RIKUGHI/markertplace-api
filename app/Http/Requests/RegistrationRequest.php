@@ -34,7 +34,7 @@ class RegistrationRequest extends FormRequest
             'role' => ['required', new Enum(RoleEnum::class)]
         ];
     }
-    
+
 
     protected function failedValidation(Validator $validator)
     {
