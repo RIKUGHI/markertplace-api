@@ -8,11 +8,8 @@
 	"item": [
 		{
 			"name": "Auth - Registration",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
@@ -23,7 +20,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"seller2\",\r\n    \"email\": \"seller2@gmail.com\",\r\n    \"password\": \"12345678\",\r\n    \"role\": \"seller\" // buyer | seller\r\n}",
+					"raw": "{\r\n    \"name\": \"buyer4\",\r\n    \"email\": \"buyer4@gmail.com\",\r\n    \"password\": \"12345678\",\r\n    \"role\": \"buyer\" // buyer | seller\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -47,7 +44,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"seller2@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}"
+					"raw": "{\r\n    \"email\": \"buyer2@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}"
 				},
 				"url": "http://127.0.0.1:8000/api/login"
 			},
@@ -59,7 +56,7 @@
 				"auth": {
 					"type": "bearer",
 					"bearer": {
-						"token": "13|jQzN4akpg180crT4W2IXeXnXUl4DTjxzOn7zY1Jp6718e198"
+						"token": "1|cLwPJas276CDBTwr1pEDBUry78cPlfkQgCIG8l0K6f55e697"
 					}
 				},
 				"method": "POST",
@@ -102,7 +99,7 @@
 				"auth": {
 					"type": "bearer",
 					"bearer": {
-						"token": "3|iDVDjI6eIn1nCbaGwMKIKBdbm8LE6g6FgRrhO7Sd4d3f4983"
+						"token": "9|qM2XXTU2xn1kdmzMBp67S5rchwWR3OEfxcztHLb1a8e62522"
 					}
 				},
 				"method": "POST",
@@ -115,7 +112,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"p7\",\r\n    \"price\": 7000,\r\n    \"description\": \"d7\"\r\n}"
+					"raw": "{\r\n    \"name\": \"p9\",\r\n    \"price\": 9000,\r\n    \"description\": \"d9\"\r\n}"
 				},
 				"url": "http://127.0.0.1:8000/api/products"
 			},
@@ -124,12 +121,6 @@
 		{
 			"name": "Products - Delete",
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": {
-						"token": "2|7yw7zeEqDD53OUSDYjut5J5sR0xNsWetFsKR0B9C3946baea"
-					}
-				},
 				"method": "DELETE",
 				"header": [
 					{

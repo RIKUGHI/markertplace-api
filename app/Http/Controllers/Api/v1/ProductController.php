@@ -22,7 +22,7 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $products = Product::orderByDesc('id')->get();
+        $products = Product::with('user')->orderByDesc('id')->get();
 
         return Api::sendResponse(200, null, ProductResource::collection($products));
     }
