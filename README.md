@@ -10,6 +10,11 @@
 -   Run `php artisan serve`.
 -   Go to link localhost:8000.
 
+## Docs
+
+-   [OpenAPI](docs/apispec.json)
+-   [Postman](docs/Marketplace%20API.postman_collection.json)
+
 ## Coding Guidelines
 
 ### Development
